@@ -138,7 +138,7 @@ record(mbbi, "$(P)$(R)ColorMode_RBV")
 record(mbbo, "$(P)$(R)BayerConvert")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_BAYER_CONVERT")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_BAYER_CONVERT")
    field(PINI, "YES")
    field(ZRST, "None")
    field(ZRVL, "0")
@@ -153,7 +153,7 @@ record(mbbo, "$(P)$(R)BayerConvert")
 record(mbbi, "$(P)$(R)BayerConvert_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_BAYER_CONVERT")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_BAYER_CONVERT")
    field(ZRST, "None")
    field(ZRVL, "0")
    field(ONST, "RGB1")
@@ -171,28 +171,28 @@ record(mbbi, "$(P)$(R)BayerConvert_RBV")
 record(longout, "$(P)$(R)PSReadStatistics")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_READ_STATISTICS")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_READ_STATISTICS")
    field(SCAN, "5 second")
 }
 
 record(stringin, "$(P)$(R)PSDriverType_RBV")
 {
    field(DTYP, "asynOctetRead")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_DRIVER_TYPE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_DRIVER_TYPE")
    field(SCAN, "I/O Intr")
 }
 
 record(stringin, "$(P)$(R)PSFilterVersion_RBV")
 {
    field(DTYP, "asynOctetRead")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_FILTER_VERSION")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_FILTER_VERSION")
    field(SCAN, "I/O Intr")
 }
 
 record(ai, "$(P)$(R)PSFrameRate_RBV")
 {
    field(DTYP, "asynFloat64")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_FRAME_RATE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_FRAME_RATE")
    field(PREC, "3")
    field(SCAN, "I/O Intr")
 }
@@ -201,77 +201,77 @@ record(longout, "$(P)$(R)PSByteRate")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_BYTE_RATE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_BYTE_RATE")
    field(VAL,  "115000000")
 }
 
 record(longin, "$(P)$(R)PSByteRate_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_BYTE_RATE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_BYTE_RATE")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSPacketSize_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_PACKET_SIZE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKET_SIZE")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSFramesCompleted_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_FRAMES_COMPLETED")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_FRAMES_COMPLETED")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSFramesDropped_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_FRAMES_DROPPED")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_FRAMES_DROPPED")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSPacketsErroneous_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_PACKETS_ERRONEOUS")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKETS_ERRONEOUS")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSPacketsMissed_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_PACKETS_MISSED")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKETS_MISSED")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSPacketsReceived_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_PACKETS_RECEIVED")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKETS_RECEIVED")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSPacketsRequested_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_PACKETS_REQUESTED")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKETS_REQUESTED")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSPacketsResent_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_PACKETS_RESENT")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKETS_RESENT")
    field(SCAN, "I/O Intr")
 }
 
 record(longin, "$(P)$(R)PSBadFrameCounter_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_BAD_FRAME_COUNTER")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_BAD_FRAME_COUNTER")
    field(SCAN, "I/O Intr")
 }
 
@@ -282,14 +282,14 @@ record(ao, "$(P)$(R)TriggerDelay")
 {
    field(PINI, "YES")
    field(DTYP, "asynFloat64")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_DELAY")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_DELAY")
    field(PREC, "6")
 }
 
 record(ai, "$(P)$(R)TriggerDelay_RBV")
 {
    field(DTYP, "asynFloat64")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_DELAY")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_DELAY")
    field(PREC, "6")
    field(SCAN, "I/O Intr")
 }
@@ -300,7 +300,7 @@ record(ai, "$(P)$(R)TriggerDelay_RBV")
 record(mbbo, "$(P)$(R)TriggerEvent")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_EVENT")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_EVENT")
    field(PINI, "YES")
    field(ZRST, "Rising edge")
    field(ZRVL, "0")
@@ -317,7 +317,7 @@ record(mbbo, "$(P)$(R)TriggerEvent")
 record(mbbi, "$(P)$(R)TriggerEvent_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_EVENT")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_EVENT")
    field(ZRST, "Rising edge")
    field(ZRVL, "0")
    field(ONST, "Falling edge")
@@ -337,7 +337,7 @@ record(mbbi, "$(P)$(R)TriggerEvent_RBV")
 record(mbbo, "$(P)$(R)TriggerOverlap")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_OVERLAP")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_OVERLAP")
    field(PINI, "YES")
    field(ZRST, "Off")
    field(ZRVL, "0")
@@ -348,7 +348,7 @@ record(mbbo, "$(P)$(R)TriggerOverlap")
 record(mbbi, "$(P)$(R)TriggerOverlap_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_OVERLAP")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_OVERLAP")
    field(ZRST, "Off")
    field(ZRVL, "0")
    field(ONST, "Previous frame")
@@ -362,7 +362,7 @@ record(mbbi, "$(P)$(R)TriggerOverlap_RBV")
 record(bo, "$(P)$(R)TriggerSoftware")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TRIGGER_SOFTWARE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_SOFTWARE")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -376,7 +376,7 @@ record(bo, "$(P)$(R)TriggerSoftware")
 record(bi, "$(P)$(R)SyncIn1Level_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_IN_1_LEVEL")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_IN_1_LEVEL")
    field(ZNAM, "Low")
    field(ONAM, "High")
    field(SCAN, "I/O Intr")
@@ -385,7 +385,7 @@ record(bi, "$(P)$(R)SyncIn1Level_RBV")
 record(bi, "$(P)$(R)SyncIn2Level_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_IN_2_LEVEL")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_IN_2_LEVEL")
    field(ZNAM, "Low")
    field(ONAM, "High")
    field(SCAN, "I/O Intr")
@@ -395,7 +395,7 @@ record(mbbo, "$(P)$(R)SyncOut1Mode")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_1_MODE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_1_MODE")
    field(ZRST, "GPO")
    field(ZRVL, "0")
    field(ONST, "AcqTrigReady")
@@ -433,7 +433,7 @@ record(mbbo, "$(P)$(R)SyncOut1Mode")
 record(mbbi, "$(P)$(R)SyncOut1Mode_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_1_MODE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_1_MODE")
    field(ZRST, "GPO")
    field(ZRVL, "0")
    field(ONST, "AcqTrigReady")
@@ -473,7 +473,7 @@ record(bo, "$(P)$(R)SyncOut1Level")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_1_LEVEL")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_1_LEVEL")
    field(ZNAM, "False")
    field(ONAM, "True")
 }
@@ -481,7 +481,7 @@ record(bo, "$(P)$(R)SyncOut1Level")
 record(bi, "$(P)$(R)SyncOut1Level_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_1_LEVEL")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_1_LEVEL")
    field(ZNAM, "False")
    field(ONAM, "True")
    field(SCAN, "I/O Intr")
@@ -491,7 +491,7 @@ record(bo, "$(P)$(R)SyncOut1Invert")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_1_INVERT")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_1_INVERT")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -499,7 +499,7 @@ record(bo, "$(P)$(R)SyncOut1Invert")
 record(bi, "$(P)$(R)SyncOut1Invert_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_1_INVERT")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_1_INVERT")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -509,7 +509,7 @@ record(mbbo, "$(P)$(R)SyncOut2Mode")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_2_MODE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_2_MODE")
    field(ZRST, "GPO")
    field(ZRVL, "0")
    field(ONST, "AcqTrigReady")
@@ -547,7 +547,7 @@ record(mbbo, "$(P)$(R)SyncOut2Mode")
 record(mbbi, "$(P)$(R)SyncOut2Mode_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_2_MODE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_2_MODE")
    field(ZRST, "GPO")
    field(ZRVL, "0")
    field(ONST, "AcqTrigReady")
@@ -587,7 +587,7 @@ record(bo, "$(P)$(R)SyncOut2Level")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_2_LEVEL")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_2_LEVEL")
    field(ZNAM, "False")
    field(ONAM, "True")
 }
@@ -595,7 +595,7 @@ record(bo, "$(P)$(R)SyncOut2Level")
 record(bi, "$(P)$(R)SyncOut2Level_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_2_LEVEL")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_2_LEVEL")
    field(ZNAM, "False")
    field(ONAM, "True")
    field(SCAN, "I/O Intr")
@@ -605,7 +605,7 @@ record(bo, "$(P)$(R)SyncOut2Invert")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_2_INVERT")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_2_INVERT")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -613,7 +613,7 @@ record(bo, "$(P)$(R)SyncOut2Invert")
 record(bi, "$(P)$(R)SyncOut2Invert_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_2_INVERT")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_2_INVERT")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -623,7 +623,7 @@ record(mbbo, "$(P)$(R)SyncOut3Mode")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_3_MODE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_3_MODE")
    field(ZRST, "GPO")
    field(ZRVL, "0")
    field(ONST, "AcqTrigReady")
@@ -661,7 +661,7 @@ record(mbbo, "$(P)$(R)SyncOut3Mode")
 record(mbbi, "$(P)$(R)SyncOut3Mode_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_3_MODE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_3_MODE")
    field(ZRST, "GPO")
    field(ZRVL, "0")
    field(ONST, "AcqTrigReady")
@@ -701,7 +701,7 @@ record(bo, "$(P)$(R)SyncOut3Level")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_3_LEVEL")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_3_LEVEL")
    field(ZNAM, "False")
    field(ONAM, "True")
 }
@@ -709,7 +709,7 @@ record(bo, "$(P)$(R)SyncOut3Level")
 record(bi, "$(P)$(R)SyncOut3Level_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_3_LEVEL")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_3_LEVEL")
    field(ZNAM, "False")
    field(ONAM, "True")
    field(SCAN, "I/O Intr")
@@ -719,7 +719,7 @@ record(bo, "$(P)$(R)SyncOut3Invert")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_3_INVERT")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_3_INVERT")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -727,7 +727,7 @@ record(bo, "$(P)$(R)SyncOut3Invert")
 record(bi, "$(P)$(R)SyncOut3Invert_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_SYNC_OUT_3_INVERT")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_SYNC_OUT_3_INVERT")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -737,7 +737,7 @@ record(mbbo, "$(P)$(R)Strobe1Mode")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_MODE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_MODE")
    field(ZRST, "AcqTrigReady")
    field(ZRVL, "0")
    field(ONST, "FrameTrigReady")
@@ -763,7 +763,7 @@ record(mbbo, "$(P)$(R)Strobe1Mode")
 record(mbbi, "$(P)$(R)Strobe1Mode_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_MODE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_MODE")
    field(ZRST, "AcqTrigReady")
    field(ZRVL, "0")
    field(ONST, "FrameTrigReady")
@@ -791,7 +791,7 @@ record(bo, "$(P)$(R)Strobe1CtlDuration")
 {
    field(PINI, "YES")
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_CTL_DURATION")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_CTL_DURATION")
    field(ZNAM, "Off")
    field(ONAM, "On")
 }
@@ -799,7 +799,7 @@ record(bo, "$(P)$(R)Strobe1CtlDuration")
 record(bi, "$(P)$(R)Strobe1CtlDuration_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_CTL_DURATION")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_CTL_DURATION")
    field(ZNAM, "Off")
    field(ONAM, "On")
    field(SCAN, "I/O Intr")
@@ -809,14 +809,14 @@ record(ao, "$(P)$(R)Strobe1Delay")
 {
    field(PINI, "YES")
    field(DTYP, "asynFloat64")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_DELAY")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_DELAY")
    field(PREC, "6")
 }
 
 record(ai, "$(P)$(R)Strobe1Delay_RBV")
 {
    field(DTYP, "asynFloat64")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_DELAY")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_DELAY")
    field(PREC, "6")
    field(SCAN, "I/O Intr")
 }
@@ -825,14 +825,14 @@ record(ao, "$(P)$(R)Strobe1Duration")
 {
    field(PINI, "YES")
    field(DTYP, "asynFloat64")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_DURATION")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_DURATION")
    field(PREC, "6")
 }
 
 record(ai, "$(P)$(R)Strobe1Duration_RBV")
 {
    field(DTYP, "asynFloat64")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_STROBE_1_DURATION")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_STROBE_1_DURATION")
    field(PREC, "6")
    field(SCAN, "I/O Intr")
 }
@@ -843,7 +843,7 @@ record(ai, "$(P)$(R)Strobe1Duration_RBV")
 record(mbbo, "$(P)$(R)PSTimestampType")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TIMESTAMP_TYPE")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TIMESTAMP_TYPE")
    field(ZRST, "NativeTicks")
    field(ZRVL, "0")
    field(ONST, "NativeSeconds")
@@ -859,7 +859,7 @@ record(mbbo, "$(P)$(R)PSTimestampType")
 record(mbbi, "$(P)$(R)PSTimestampType_RBV")
 {
    field(DTYP, "asynInt32")
-   field(INP,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_TIMESTAMP_TYPE")
+   field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TIMESTAMP_TYPE")
    field(ZRST, "NativeTicks")
    field(ZRVL, "0")
    field(ONST, "NativeSeconds")
@@ -878,6 +878,6 @@ record(mbbi, "$(P)$(R)PSTimestampType_RBV")
 record(longout, "$(P)$(R)PSResetTimer")
 {
    field(DTYP, "asynInt32")
-   field(OUT,  "@asyn($(PORT),$(ADDR),$(TIMEOUT))PS_RESET_TIMER")
+   field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_RESET_TIMER")
 }
 
