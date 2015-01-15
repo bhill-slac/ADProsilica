@@ -128,6 +128,7 @@ record(mbbi, "$(P)$(R)ColorMode_RBV")
    field(SXVL, "")
    field(SVST, "")
    field(SVVL, "")
+   field(UNSV, "INVALID")
 }
 
 # The following records are specific to the Prosilica
@@ -186,6 +187,10 @@ record(longout, "$(P)$(R)PSReadStatistics")
    field(DTYP, "asynInt32")
    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_READ_STATISTICS")
    field(SCAN, "5 second")
+   field(DISS, "INVALID" )
+   field(DISV, "0" )
+   field(SDIS, "$(P)$(R)AsynIO.CNCT" )
+   field(PINI, "YES" )
 }
 
 record(stringin, "$(P)$(R)PSDriverType_RBV")
@@ -206,8 +211,11 @@ record(ai, "$(P)$(R)PSFrameRate_RBV")
 {
    field(DTYP, "asynFloat64")
    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_FRAME_RATE")
-   field(PREC, "3")
+   field(PREC, "2")
+   field(EGU,  "Hz" )
    field(SCAN, "I/O Intr")
+   field( LOW,  "0" )
+   field( LSV,  "MINOR" )
 }
 
 record(longout, "$(P)$(R)PSByteRate")
@@ -223,6 +231,14 @@ record(longin, "$(P)$(R)PSByteRate_RBV")
    field(DTYP, "asynInt32")
    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_BYTE_RATE")
    field(SCAN, "I/O Intr")
+   field( LOW,  "114999000" )
+   field( LOLO, "114000000" )
+   field( HIGH, "115001000" )
+   field( HIHI, "116000000" )
+   field( LSV,  "MINOR" )
+   field( LLSV, "MAJOR" )
+   field( HSV,  "MINOR" )
+   field( HHSV, "MAJOR" )
 }
 
 record(longin, "$(P)$(R)PSPacketSize_RBV")
@@ -230,6 +246,10 @@ record(longin, "$(P)$(R)PSPacketSize_RBV")
    field(DTYP, "asynInt32")
    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_PACKET_SIZE")
    field(SCAN, "I/O Intr")
+   field( LOW,  "8227" )
+   field( LOLO, "1499" )
+   field( LSV,  "MINOR" )
+   field( LLSV, "MAJOR" )
 }
 
 record(longin, "$(P)$(R)PSFramesCompleted_RBV")
@@ -331,6 +351,7 @@ record(mbbi, "$(P)$(R)TriggerEvent_RBV")
 {
    field(DTYP, "asynInt32")
    field(INP,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_TRIGGER_EVENT")
+   field(PINI, "YES")
    field(ZRST, "Rising edge")
    field(ZRVL, "0")
    field(ONST, "Falling edge")
@@ -892,5 +913,6 @@ record(longout, "$(P)$(R)PSResetTimer")
 {
    field(DTYP, "asynInt32")
    field(OUT,  "@asyn($(PORT),$(ADDR=0),$(TIMEOUT=1))PS_RESET_TIMER")
+   field(SCAN, "$(TRSCAN=Passive)")
 }
 
