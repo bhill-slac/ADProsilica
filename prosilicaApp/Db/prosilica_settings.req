@@ -1,3 +1,4 @@
+file "ADBase_settings.req", P=$(P), R=$(R)
 $(P)$(R)BayerConvert
 $(P)$(R)PSReadStatistics.SCAN
 $(P)$(R)PSByteRate
@@ -17,3 +18,4 @@ $(P)$(R)Strobe1Duration
 $(P)$(R)TriggerEvent
 $(P)$(R)TriggerOverlap
 $(P)$(R)TriggerDelay
+$(P)$(R)PSTimestampType

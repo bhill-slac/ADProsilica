@@ -2,6 +2,8 @@
 # Mark Rivers
 # March 27, 2008
 
+include "ADBase.template"
+
 ###############################################################################
 #  Note: The following are records defined in ADBase.template.                #
 #        We are changing some of the fields here to reflect valid values for  #
@@ -852,6 +854,8 @@ record(mbbo, "$(P)$(R)PSTimestampType")
    field(TWVL, "2")
    field(THST, "EPICS")
    field(THVL, "3")
+   field(THST, "IOC")
+   field(THVL, "4")
    field(VAL, "0")
    field(PINI, "YES")
 }
@@ -868,6 +872,8 @@ record(mbbi, "$(P)$(R)PSTimestampType_RBV")
    field(TWVL, "2")
    field(THST, "EPICS")
    field(THVL, "3")
+   field(THST, "IOC")
+   field(THVL, "4")
    field(SCAN, "I/O Intr")
 }
 

@@ -47,6 +47,9 @@ static ELLLIST *cameraList;
 #define MAX_PVAPI_FRAMES  2  /**< Number of frame buffers for PvApi */
 #define MAX_PACKET_SIZE 8228
 
+#define CONNECT_RETRY_COUNT    30 /* Number of times to retry connecting */
+#define CONNECT_RETRY_INTERVAL  1 /* Time to sleep between trying to connect */
+
 /** Driver for Prosilica GigE and CameraLink cameras using their PvApi library */
 class prosilica : public ADDriver {
 public:
@@ -164,12 +167,17 @@ typedef enum {
 
 /* These describe the contents of the NDArray timeStamp parameter */
 typedef enum {
-    PSTimestampTypeNativeTicks,   // The number of internal camera clock ticks which have elapsed since the last timer reset
-    PSTimestampTypeNativeSeconds, // The number of seconds which have elapsed since the last timer reset
-    PSTimestampTypePOSIX,         // IntegerPart(timeStamp) is the number of seconds since the POSIX Epoch (00:00:00 UTC, January 1, 1970)
-                                  // DecimalPart(timestamp) is the fraction of the second afterward
-    PSTimestampTypeEPICS          // IntegerPart(timeStamp) is the number of seconds since the EPICS Epoch (January 1, 1990)
-                                  // DecimalPart(timestamp) is the fraction of the second afterward
+    PSTimestampTypeNativeTicks,
+    // The number of internal camera clock ticks which have elapsed 
+    // since the last timer reset
+    PSTimestampTypeNativeSeconds, 
+    // The number of seconds which have elapsed since the last timer reset
+    PSTimestampTypePOSIX,         
+    // The number of seconds since the POSIX Epoch (00:00:00 UTC, January 1, 1970)
+    PSTimestampTypeEPICS,         
+    // The number of seconds since the EPICS Epoch (January 1, 1990)
+    PSTimestampTypeIOC
+    // Use the IOC clock to sync timeStamp and driver timestamps
 } PSTimestampType_t;
 
 
@@ -468,8 +476,16 @@ void prosilica::frameCallback(tPvFrame *pFrame)
         /* Convert from the PvApi data types to ADDataType */
         /* The pFrame structure does not contain the binning, get that from param lib,
          * but it could be wrong for this frame if recently changed */
+
+        /* First lets set the timestamp so it is as close to acquisition as 
+         * possible and set the unique id from the framecounter */
+
+        pImage->uniqueId = pFrame->FrameCount;
+        updateTimeStamp(&pImage->epicsTS);
+
         getIntegerParam(ADBinX, &binX);
         getIntegerParam(ADBinY, &binY);
+
         /* The mono cameras can return a Bayer pattern which is invalid, and this can
          * crash the file plugin.  Fix it here. */
         if (pFrame->BayerPattern > ePvBayerBGGR) pFrame->BayerPattern = ePvBayerRGGB;
@@ -692,9 +708,7 @@ void prosilica::frameCallback(tPvFrame *pFrame)
         pImage->pAttributeList->add("BayerPattern", "Bayer Pattern", NDAttrInt32, &bayerPattern);
         pImage->pAttributeList->add("ColorMode", "Color Mode", NDAttrInt32, &colorMode);
         
-        /* Set the uniqueId and time stamp */
-        pImage->uniqueId = pFrame->FrameCount;
-        updateTimeStamp(&pImage->epicsTS);
+        /* Now set timeStamp field in pImage */
         const double native_frame_ticks =  ((double)pFrame->TimestampLo + (double)pFrame->TimestampHi*4294967296.);
 
         /* Determine how to set the timeStamp */
@@ -714,18 +728,27 @@ void prosilica::frameCallback(tPvFrame *pFrame)
             case PSTimestampTypePOSIX: {
                     if (this->timeStampFrequency == 0) this->timeStampFrequency = 1;
                     epicsTimeStamp epics_frame_time = lastSyncTime;
-                    epicsTimeAddSeconds(&epics_frame_time, native_frame_ticks/this->timeStampFrequency);
+                    epicsTimeAddSeconds(&epics_frame_time, 
+                        native_frame_ticks/this->timeStampFrequency);
                     timespec ts;
                     epicsTimeToTimespec(&ts, &epics_frame_time);
-                    pImage->timeStamp = (double)ts.tv_sec + ((double)ts.tv_nsec * 1.0e-09);
+                    pImage->timeStamp = (double)ts.tv_sec + ((double)ts.tv_nsec * 1.0e-9);
                 }
                 break;
 
             case PSTimestampTypeEPICS: {
                     if (this->timeStampFrequency == 0) this->timeStampFrequency = 1;
                     epicsTimeStamp epics_frame_time = lastSyncTime;
-                    epicsTimeAddSeconds(&epics_frame_time, native_frame_ticks/this->timeStampFrequency);
-                    pImage->timeStamp = (double)epics_frame_time.secPastEpoch + ((double)epics_frame_time.nsec * 1.0e-09);
+                    epicsTimeAddSeconds(&epics_frame_time, 
+                        native_frame_ticks/this->timeStampFrequency);
+                    pImage->timeStamp = (double)epics_frame_time.secPastEpoch + 
+                      ((double)epics_frame_time.nsec * 1.0e-09);
+                }
+                break;
+
+            case PSTimestampTypeIOC: {
+                    pImage->timeStamp = (double)pImage->epicsTS.secPastEpoch 
+                      + ((double)pImage->epicsTS.nsec * 1.0e-9);
                 }
                 break;
 
@@ -839,12 +862,7 @@ asynStatus prosilica::setGeometry()
     status |= getIntegerParam(ADSizeY, &sizeY);
     status |= getIntegerParam(ADMaxSizeX, &maxSizeX);
     status |= getIntegerParam(ADMaxSizeY, &maxSizeY);
-    
-    /* CMOS cameras don't support binning, so ignore ePvErrNotFound errors */
-    s = PvAttrUint32Set(this->PvHandle, "BinningX", binX);
-    if (s != ePvErrNotFound) status |= s;
-    s = PvAttrUint32Set(this->PvHandle, "BinningY", binY);
-    if (s != ePvErrNotFound) status |= s;
+
     if (minX + sizeX > maxSizeX) {
         sizeX = maxSizeX - minX;
         setIntegerParam(ADSizeX, sizeX);
@@ -853,10 +871,19 @@ asynStatus prosilica::setGeometry()
         sizeY = maxSizeY - minY;
         setIntegerParam(ADSizeY, sizeY);
     }
-    status |= PvAttrUint32Set(this->PvHandle, "RegionX", minX/binX);
-    status |= PvAttrUint32Set(this->PvHandle, "RegionY", minY/binY);
-    status |= PvAttrUint32Set(this->PvHandle, "Width",   sizeX/binX);
-    status |= PvAttrUint32Set(this->PvHandle, "Height",  sizeY/binY);
+    
+    /* CMOS cameras don't support binning, so ignore ePvErrNotFound errors */
+    s = PvAttrUint32Set(this->PvHandle, "BinningX", binX);
+    if (s != ePvErrNotFound) status |= s;
+    s = PvAttrUint32Set(this->PvHandle, "BinningY", binY);
+    if (s != ePvErrNotFound) status |= s;
+
+    if(!status){
+      status |= PvAttrUint32Set(this->PvHandle, "RegionX", minX/binX);
+      status |= PvAttrUint32Set(this->PvHandle, "RegionY", minY/binY);
+      status |= PvAttrUint32Set(this->PvHandle, "Width",   sizeX/binX);
+      status |= PvAttrUint32Set(this->PvHandle, "Height",  sizeY/binY);
+    }
     
     if (status) asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, 
                       "%s:%s: error, status=%d\n", 
@@ -883,13 +910,6 @@ asynStatus prosilica::getGeometry()
     status |= PvAttrUint32Get(this->PvHandle, "Width",    &sizeX);
     status |= PvAttrUint32Get(this->PvHandle, "Height",   &sizeY);
     
-    status |= setIntegerParam(ADBinX,  binX);
-    status |= setIntegerParam(ADBinY,  binY);
-    status |= setIntegerParam(ADMinX,  minX*binX);
-    status |= setIntegerParam(ADMinY,  minY*binY);
-    status |= setIntegerParam(ADSizeX, sizeX*binX);
-    status |= setIntegerParam(ADSizeY, sizeY*binY);
-
     status |= setIntegerParam(ADBinX,  binX);
     status |= setIntegerParam(ADBinY,  binY);
     status |= setIntegerParam(ADMinX,  minX*binX);
@@ -1304,6 +1324,30 @@ asynStatus prosilica::connectCamera()
         this->uniqueId = this->PvCameraInfo.UniqueId;
     }
 
+    // Here's where reconnect fails.
+    // PermittedAccess flags are 0x0002 for around 5 seconds after
+    // a hard IOC restart which didn't call disconnectCamera()
+    unsigned retryCount = 0;
+    while ( (this->PvCameraInfo.PermittedAccess & ePvAccessMaster) == 0 ) {
+        asynPrint(this->pasynUserSelf, ASYN_TRACE_FLOW, 
+              "%s:%s: No RW access for camera %lu, retrying ...\n", 
+              driverName, functionName, this->uniqueId);
+        
+        // Wait a second and fetch status again
+        epicsThreadSleep(CONNECT_RETRY_INTERVAL);
+
+        status = PvCameraInfoEx(this->uniqueId, &this->PvCameraInfo, sizeof(this->PvCameraInfo));
+        if (status) {
+            asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, 
+                  "%s:%s: Cannot read status for camera %lu\n", 
+                  driverName, functionName, this->uniqueId);
+            return asynError;
+        }
+        if ( ++retryCount >= CONNECT_RETRY_COUNT ) {
+            break;
+        }
+    }
+
     if ((this->PvCameraInfo.PermittedAccess & ePvAccessMaster) == 0) {
         asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, 
               "%s:%s: Cannot get control of camera %lu, access flags=%lx\n", 
@@ -1323,7 +1367,7 @@ asynStatus prosilica::connectCamera()
         this->PvHandle = NULL;
         return asynError;
     }
-    
+ 
     /* Negotiate maximum frame size */
     status = PvCaptureAdjustPacketSize(this->PvHandle, MAX_PACKET_SIZE);
     if (status) {
@@ -1422,6 +1466,10 @@ asynStatus prosilica::connectCamera()
      * With CMOS cameras if the camera is already acquiring when we connect there will be problems,
      * and this can happen if the camera was acquiring when the IOC previously exited. */
     PvCommandRun(this->PvHandle, "AcquisitionAbort");
+
+    /* Now sync the timer on the camera with the IOC */
+
+    this->syncTimer();
         
     /* We found the camera and everything is OK.  Signal to asynManager that we are connected. */
     status = pasynManager->exceptionConnect(this->pasynUserSelf);
@@ -1455,7 +1503,6 @@ asynStatus prosilica::writeInt32(asynUser *pasynUser, epicsInt32 value)
     status |= setIntegerParam(function, value);
 
     if ((function == ADBinX) ||
-        (function == ADBinX) ||
         (function == ADBinY) ||
         (function == ADMinX) ||
         (function == ADSizeX) ||
@@ -1797,22 +1844,24 @@ prosilica::prosilica(const char *portName, const char *cameraId, int maxBuffers,
 
         PvApiInitialized = 1;
     }
-    
-    /* Need to wait a short while for the PvAPI library to find the cameras (0.2 seconds is not long enough in 1.24) */
+
+    /* Need to wait a short while for the PvAPI library to find the cameras */
+    /* (0.2 seconds is not long enough in 1.24) */
     epicsThreadSleep(1.0);
-    
-    /* Try to connect to the camera.  
-     * It is not a fatal error if we cannot now, the camera may be off or owned by
-     * someone else.  It may connect later. */
-    this->lock();
-    status = connectCamera();
-    this->unlock();
-    if (status) {
-        printf("%s:%s: cannot connect to camera %s, manually connect when available.\n", 
-               driverName, functionName, cameraId);
-        return;
+ 
+    if ( this->PvHandle == NULL ) {
+        /* Try to connect to the camera.  
+         * It is not a fatal error if we cannot now, the camera may be off or owned by
+         * someone else.  It may connect later. */
+        this->lock();
+        status = connectCamera();
+        this->unlock();
+        if (status) {
+            printf("%s:%s: cannot connect to camera %s, manually connect when available.\n", 
+                   driverName, functionName, cameraId);
+        }
     }
-    
+ 
     /* Register the shutdown function for epicsAtExit */
     epicsAtExit(shutdown, (void*)this);
 }
